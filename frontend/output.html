@@ -4,39 +4,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clustering Results</title>
-    <link rel="stylesheet" href="output.css">
+    <title>Clustered Data</title>
 </head>
 
 <body>
     <div class="container">
-        <h1>Clustering Results</h1>
-        <div id="results"></div>
+        <h1>Clustered Data</h1>
+        <div id="clusters"></div>
     </div>
 
     <script>
-        // Fetch the clustering results from the server
-        fetch("http://localhost:3000/clustering-results")
-            .then((response) => response.json())
-            .then((data) => {
-                const resultsDiv = document.getElementById("results");
-                if (data && data.length > 0) {
-                    let outputHtml = '<ul>';
-                    data.forEach((item) => {
-                        outputHtml += `<li>Serial Number: ${item.serial_number}, Cluster: ${item.cluster}</li>`;
+        // Function to fetch the list of available clusters and their file names
+        function fetchClusters() {
+            fetch("http://localhost:3000/clusters")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch clusters.");
+                    }
+                    return response.json();
+                })
+                .then((clusters) => {
+                    // Display the list of clusters and provide download links
+                    const clustersContainer = document.getElementById("clusters");
+                    clusters.forEach((cluster) => {
+                        const clusterElement = document.createElement("div");
+                        clusterElement.innerHTML = `<p>Cluster ${cluster.clusterId} - <a href="http://localhost:3000/download/${cluster.clusterId}" download>Download CSV</a></p>`;
+                        clustersContainer.appendChild(clusterElement);
                     });
-                    outputHtml += '</ul>';
-                    resultsDiv.innerHTML = outputHtml;
-                } else {
-                    resultsDiv.textContent = "No clustering results available.";
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                const resultsDiv = document.getElementById("results");
-                resultsDiv.textContent = "Error occurred while fetching results.";
-            });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Fetch and display the clusters on page load
+        fetchClusters();
     </script>
 </body>
+<style>body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
 
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin-top: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+table th {
+  background-color: #f2f2f2;
+}
+
+a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+a:hover {
+  background-color: #0056b3;
+}
+</style>
 </html>

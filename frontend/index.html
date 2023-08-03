@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 
+
 <body>
     <div class="container">
         <h1>CSV File Upload</h1>
@@ -39,9 +40,13 @@
                     return response.text();
                 })
                 .then((data) => {
-                    // Handle the data or display a success message
-                    document.getElementById("message").textContent = "File uploaded successfully!";
-                    console.log(data);
+                    // Display success message
+                    document.getElementById("message").textContent = data;
+
+                    console.log("File uploaded and processed successfully!");
+
+                    // Open output.html in the same window
+                    window.open("output.html", "_self");
                 })
                 .catch((error) => {
                     document.getElementById("message").textContent = "Error occurred during file upload.";
