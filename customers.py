@@ -44,7 +44,7 @@ clusters = kmeans.fit_predict(X)
 data['Cluster'] = clusters
 
 
-# Create a folder for saving CSV files (replace 'output_folder' with your desired folder path)
+# Create a folder for saving CSV files
 output_folder = 'clustered_csv'
 os.makedirs(output_folder, exist_ok=True)
 
@@ -67,10 +67,6 @@ for i in range(k):
     cluster_name = create_cluster_name(cluster_customers)
     file_name = os.path.join(output_folder, f'{cluster_name}.csv')
     cluster_customers.to_csv(file_name, index=False)
-    
-# # Save each cluster data to a separate CSV file
-# for cluster_id, cluster_customers in cluster_data.items():
-#     cluster_customers.to_csv(f'cluster_{cluster_id + 1}.csv', index=False)
 
 # Visualize the clusters
 plt.scatter(X[clusters == 0, 0], X[clusters == 0, 1], s=50, c='red', label='Cluster 1')
